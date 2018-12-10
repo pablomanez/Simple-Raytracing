@@ -1,7 +1,16 @@
 ﻿#include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
+// Librerias C++
 #include <iostream>
+#include <fstream>
+
+// Librerias propias
+#include <cuda.h>
+//#define GLM_FORCE_CUDA
+#define GLM_FORCE_PURE
+#include "glm/glm.hpp"
+#include "glm/ext.hpp"
 
 #define K_TPB	256
 #define K_ELEMS 25610
@@ -30,21 +39,31 @@ __global__ void sumaVectoresSuprema(float *a, float *b, float *c, int total_elem
 
 // SABER LIMITACION DE TARJETA GRAFICA -> device query (de CUDA)
 int main(void) {
-	float r, g, b;
-	int nx = 200;
-	int ny = 100;
+	glm::vec3 color;
 	int ir, ig, ib;
+	int nx = 200;	// Ancho
+	int ny = 100;	// Alto
+	
+	std::ofstream _out("img.PPM");
 
-	std::cout << "P3\n" << nx << " " << ny << "\n255\n";
+	// Inicio del archivo PPM
+	//	P3  -> El archivo esta en ASCII
+	//	255 -> Color 'maximo'
+	_out << "P3\n" << nx << " " << ny << "\n255\n";
 	for (int j = ny - 1; j >= 0; j--) {
 		for (int i = 0; i < nx; i++) {
-			r = float(i) / float(nx);
-			g = float(j) / float(ny);
-			b = 0.2;
-			ir = int(255.99*r);
-			ig = int(255.99*g);
-			ib = int(255.99*b);
-			std::cout << ir << " " << ig << " " << ib << "\n";
+			color = glm::vec3(
+				float(i) / float(nx), 
+				float(j) / float(ny),
+				0.2
+			);
+			
+			ir = int(255.99 * color.r);
+			ig = int(255.99 * color.g);
+			ib = int(255.99 * color.b);
+			
+			// Valores de los pixeles
+			_out << ir << " " << ig << " " << ib << "\n";
 		}
 	}
 

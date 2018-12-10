@@ -1,90 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-  </ItemGroup>
-  <PropertyGroup Label="Globals">
-    <ProjectGuid>{B59AEFC9-3EAA-4A62-8298-8D1F8D7141B8}</ProjectGuid>
-    <RootNamespace>Raytracing</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
-    <CudaToolkitCustomDir>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.0</CudaToolkitCustomDir>
-  </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
-  </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 10.0.props" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-  </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-    <CudaCompile>
-      <TargetMachinePlatform>64</TargetMachinePlatform>
-      <CodeGeneration>compute_30,sm_30</CodeGeneration>
-    </CudaCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-    <CudaCompile>
-      <TargetMachinePlatform>64</TargetMachinePlatform>
-      <CodeGeneration>compute_30,sm_30</CodeGeneration>
-    </CudaCompile>
-  </ItemDefinitionGroup>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="glm\common.hpp" />
+    <ClInclude Include="glm\detail\_features.hpp" />
+    <ClInclude Include="glm\detail\_fixes.hpp" />
+    <ClInclude Include="glm\detail\_noise.hpp" />
+    <ClInclude Include="glm\detail\_swizzle.hpp" />
+    <ClInclude Include="glm\detail\_swizzle_func.hpp" />
+    <ClInclude Include="glm\detail\_vectorize.hpp" />
     <ClInclude Include="glm\detail\compute_common.hpp" />
     <ClInclude Include="glm\detail\compute_vector_relational.hpp" />
     <ClInclude Include="glm\detail\qualifier.hpp" />
@@ -105,14 +30,6 @@
     <ClInclude Include="glm\detail\type_vec2.hpp" />
     <ClInclude Include="glm\detail\type_vec3.hpp" />
     <ClInclude Include="glm\detail\type_vec4.hpp" />
-    <ClInclude Include="glm\detail\_features.hpp" />
-    <ClInclude Include="glm\detail\_fixes.hpp" />
-    <ClInclude Include="glm\detail\_noise.hpp" />
-    <ClInclude Include="glm\detail\_swizzle.hpp" />
-    <ClInclude Include="glm\detail\_swizzle_func.hpp" />
-    <ClInclude Include="glm\detail\_vectorize.hpp" />
-    <ClInclude Include="glm\exponential.hpp" />
-    <ClInclude Include="glm\ext.hpp" />
     <ClInclude Include="glm\ext\matrix_clip_space.hpp" />
     <ClInclude Include="glm\ext\matrix_double2x2.hpp" />
     <ClInclude Include="glm\ext\matrix_double2x2_precision.hpp" />
@@ -212,9 +129,6 @@
     <ClInclude Include="glm\ext\vector_uint4.hpp" />
     <ClInclude Include="glm\ext\vector_uint4_precision.hpp" />
     <ClInclude Include="glm\ext\vector_ulp.hpp" />
-    <ClInclude Include="glm\fwd.hpp" />
-    <ClInclude Include="glm\geometric.hpp" />
-    <ClInclude Include="glm\glm.hpp" />
     <ClInclude Include="glm\gtc\bitfield.hpp" />
     <ClInclude Include="glm\gtc\color_space.hpp" />
     <ClInclude Include="glm\gtc\constants.hpp" />
@@ -294,10 +208,25 @@
     <ClInclude Include="glm\gtx\transform2.hpp" />
     <ClInclude Include="glm\gtx\type_aligned.hpp" />
     <ClInclude Include="glm\gtx\type_trait.hpp" />
+    <ClInclude Include="glm\gtx\vec_swizzle.hpp" />
     <ClInclude Include="glm\gtx\vector_angle.hpp" />
     <ClInclude Include="glm\gtx\vector_query.hpp" />
-    <ClInclude Include="glm\gtx\vec_swizzle.hpp" />
     <ClInclude Include="glm\gtx\wrap.hpp" />
+    <ClInclude Include="glm\simd\common.h" />
+    <ClInclude Include="glm\simd\exponential.h" />
+    <ClInclude Include="glm\simd\geometric.h" />
+    <ClInclude Include="glm\simd\integer.h" />
+    <ClInclude Include="glm\simd\matrix.h" />
+    <ClInclude Include="glm\simd\packing.h" />
+    <ClInclude Include="glm\simd\platform.h" />
+    <ClInclude Include="glm\simd\trigonometric.h" />
+    <ClInclude Include="glm\simd\vector_relational.h" />
+    <ClInclude Include="glm\common.hpp" />
+    <ClInclude Include="glm\exponential.hpp" />
+    <ClInclude Include="glm\ext.hpp" />
+    <ClInclude Include="glm\fwd.hpp" />
+    <ClInclude Include="glm\geometric.hpp" />
+    <ClInclude Include="glm\glm.hpp" />
     <ClInclude Include="glm\integer.hpp" />
     <ClInclude Include="glm\mat2x2.hpp" />
     <ClInclude Include="glm\mat2x3.hpp" />
@@ -310,15 +239,6 @@
     <ClInclude Include="glm\mat4x4.hpp" />
     <ClInclude Include="glm\matrix.hpp" />
     <ClInclude Include="glm\packing.hpp" />
-    <ClInclude Include="glm\simd\common.h" />
-    <ClInclude Include="glm\simd\exponential.h" />
-    <ClInclude Include="glm\simd\geometric.h" />
-    <ClInclude Include="glm\simd\integer.h" />
-    <ClInclude Include="glm\simd\matrix.h" />
-    <ClInclude Include="glm\simd\packing.h" />
-    <ClInclude Include="glm\simd\platform.h" />
-    <ClInclude Include="glm\simd\trigonometric.h" />
-    <ClInclude Include="glm\simd\vector_relational.h" />
     <ClInclude Include="glm\trigonometric.hpp" />
     <ClInclude Include="glm\vec2.hpp" />
     <ClInclude Include="glm\vec3.hpp" />
@@ -461,8 +381,4 @@
   <ItemGroup>
     <ClCompile Include="glm\detail\glm.cpp" />
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 10.0.targets" />
-  </ImportGroup>
 </Project>

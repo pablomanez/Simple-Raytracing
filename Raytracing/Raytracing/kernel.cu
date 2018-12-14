@@ -7,10 +7,8 @@
 
 // Librerias propias
 #include <cuda.h>
-//#define GLM_FORCE_CUDA
-#define GLM_FORCE_PURE
-#include "glm/glm.hpp"
-#include "glm/ext.hpp"
+#define GLM_FORCE_CUDA
+#include <glm/glm.hpp>
 
 #define K_TPB	256
 #define K_ELEMS 25610

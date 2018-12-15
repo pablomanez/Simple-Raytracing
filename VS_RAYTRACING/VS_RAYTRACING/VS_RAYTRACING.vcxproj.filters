@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="kernel.cu" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{26bef1d1-b8b4-4f35-9abf-8457ed665e6a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Util.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="ppmManagement.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="ray.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ppmManagement.cu">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ray.cu">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

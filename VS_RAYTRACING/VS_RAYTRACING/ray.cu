@@ -11,13 +11,13 @@ glm::vec3 ray::getColor() {
 
 ray::ray(const glm::vec3 &A, const glm::vec3 &B){
 	origin = A;
-	origin = B;
+	dir = B;
 }
 
 
 void ray::setRayParameters(const glm::vec3 &A, const glm::vec3 &B) {
 	origin = A;
-	origin = B;
+	dir = B;
 }
 
 glm::vec3 ray::getOrigin() {

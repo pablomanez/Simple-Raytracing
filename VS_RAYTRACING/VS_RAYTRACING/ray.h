@@ -9,6 +9,7 @@ class ray{
 			
 		void setRayParameters(const glm::vec3&, const glm::vec3&);
 
+		bool hitSphere(const glm::vec3&, float);
 		glm::vec3 getColor();
 		glm::vec3 getOrigin();
 		glm::vec3 getDirection();

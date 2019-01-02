@@ -4,6 +4,7 @@
 #include "sphere.h"
 #include "hitable_list.h"
 #include "hitable.h"
+#include "camera.h"
 
 class ppmManagement{
 	public:

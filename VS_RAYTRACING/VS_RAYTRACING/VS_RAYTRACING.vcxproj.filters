@@ -8,6 +8,9 @@
     <CudaCompile Include="hitable_list.cu">
       <Filter>src</Filter>
     </CudaCompile>
+    <CudaCompile Include="camera.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -34,6 +37,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="hitable_list.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="camera.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -80,6 +80,7 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="camera.cu" />
     <CudaCompile Include="hitable_list.cu" />
     <CudaCompile Include="kernel.cu" />
     <CudaCompile Include="sphere.cu" />
@@ -88,6 +89,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="camera.h" />
     <ClInclude Include="hitable.h" />
     <ClInclude Include="hitable_list.h" />
     <ClInclude Include="ppmManagement.h" />

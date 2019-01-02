@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <random>
 
 #include <cuda.h>
 #define GLM_FORCE_PURE

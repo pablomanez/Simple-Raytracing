@@ -2,6 +2,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="sphere.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
+    <CudaCompile Include="hitable_list.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -19,6 +25,15 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="ray.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="hitable.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="sphere.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="hitable_list.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -80,14 +80,19 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="hitable_list.cu" />
     <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="sphere.cu" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="hitable.h" />
+    <ClInclude Include="hitable_list.h" />
     <ClInclude Include="ppmManagement.h" />
     <ClInclude Include="ray.h" />
+    <ClInclude Include="sphere.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>

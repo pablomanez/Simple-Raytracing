@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Util.h"
+#include <float.h>
 
 class ray{
 	public:
@@ -9,11 +11,9 @@ class ray{
 			
 		void setRayParameters(const glm::vec3&, const glm::vec3&);
 
-		bool hitSphere(const glm::vec3&, float);
-		glm::vec3 getColor();
-		glm::vec3 getOrigin();
-		glm::vec3 getDirection();
-		glm::vec3 getPointAtParameter(float);
+		glm::vec3 getOrigin() const;
+		glm::vec3 getDirection() const;
+		glm::vec3 getPointAtParameter(float) const;
 
 	private:
 		glm::vec3 origin;

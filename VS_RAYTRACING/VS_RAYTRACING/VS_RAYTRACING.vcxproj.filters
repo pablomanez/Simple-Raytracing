@@ -11,6 +11,9 @@
     <CudaCompile Include="camera.cu">
       <Filter>src</Filter>
     </CudaCompile>
+    <CudaCompile Include="lambertian.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -40,6 +43,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="camera.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="lambertian.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="material.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

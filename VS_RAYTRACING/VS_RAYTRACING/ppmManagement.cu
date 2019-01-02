@@ -3,19 +3,6 @@
 ppmManagement::ppmManagement(){}
 ppmManagement::~ppmManagement(){}
 
-std::default_random_engine gen;
-std::uniform_real_distribution<double> d_dist(0.0, 1.0);
-std::uniform_real_distribution<float> f_dist(0.0, 1.0);
-
-
-glm::vec3 ppmManagement::randomInUnitSphere() {
-	glm::vec3 p;
-	do {
-		p = 2.0f*glm::vec3(d_dist(gen), d_dist(gen), d_dist(gen)) - glm::vec3(1,1,1);
-	} while ( (glm::length(p)*glm::length(p)) >= 1.0);
-	return p;
-}
-
 glm::vec3 ppmManagement::getColor(const ray& r, hitable *WORLD) {
 	hit_record rec;
 	if (WORLD->hit(r, 0.001, FLT_MAX, rec)) {
@@ -55,8 +42,8 @@ void ppmManagement::createImage(int _w, int _h, int ns, const std::string &_name
 		for (int i = 0; i < _w; i++) {
 			color = glm::vec3(0, 0, 0);
 			for (int s = 0; s < ns; s++) {
-				u = float(i + d_dist(gen)) / float(_w);
-				v = float(j + d_dist(gen)) / float(_h);
+				u = float(i + UTIL_rand_d()) / float(_w);
+				v = float(j + UTIL_rand_d()) / float(_h);
 				r = cam.getRay(u, v);
 				color += getColor(r, WORLD);
 			}

@@ -1,6 +1,6 @@
 #pragma once
-#include "ray.h"
 #include "Util.h"
+#include "ray.h"
 
 class camera {
 	private:

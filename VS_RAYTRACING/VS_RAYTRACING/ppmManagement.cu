@@ -15,7 +15,9 @@ glm::vec3 ppmManagement::getColor(const ray& r, hitable *WORLD) {
 	}
 }
 
-void ppmManagement::createImage(int _w, int _h, const std::string &_name) {
+void ppmManagement::createImage(int _w, int _h, int ns, const std::string &_name) {
+	// ns es la precision del aliasing 
+	// ns = 100 (default)
 	std::ofstream _out(_name);
 	int ir, ig, ib, ns;
 	float u,v;
@@ -29,8 +31,7 @@ void ppmManagement::createImage(int _w, int _h, const std::string &_name) {
 	hitable *WORLD = new hitable_list(list, total_hitables);
 
 	camera cam;
-	ns = 100;
-
+	
 	std::default_random_engine gen;
 	std::uniform_real_distribution<double> dist(0.0, 1.0);
 	// Inicio del archivo PPM

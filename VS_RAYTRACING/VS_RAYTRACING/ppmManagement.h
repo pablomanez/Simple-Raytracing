@@ -12,6 +12,6 @@ class ppmManagement{
 		~ppmManagement();
 
 		glm::vec3 getColor(const ray&,hitable*);
-		void createImage(int,int,const std::string&);
+		void createImage(int,int,int,const std::string&);
 };
 

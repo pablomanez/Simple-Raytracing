@@ -35,8 +35,8 @@ void ppmManagement::createImage(int _w, int _h, int ns, const std::string &_name
 	hitable *list[total_hitables];
 	list[0] = new sphere(glm::vec3(0, 0, -1), 0.5, new lambertian(glm::vec3(0.8, 0.3, 0.3)));
 	list[1] = new sphere(glm::vec3(0, -100.5, -1), 100, new lambertian(glm::vec3(0.8, 0.8, 0.0)));
-	list[2] = new sphere(glm::vec3(1,0,-1), 0.5, new metal(glm::vec3(0.8, 0.6, 0.2)));
-	list[3] = new sphere(glm::vec3(-1,0,-1), 0.5, new metal(glm::vec3(0.8, 0.8, 0.8)));
+	list[2] = new sphere(glm::vec3(1,0,-1), 0.5, new metal(glm::vec3(0.8, 0.6, 0.2),0.3));
+	list[3] = new sphere(glm::vec3(-1,0,-1), 0.5, new metal(glm::vec3(0.8, 0.8, 0.8),1.0));
 	hitable *WORLD = new hitable_list(list, total_hitables);
 
 	camera cam;

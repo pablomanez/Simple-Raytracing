@@ -84,6 +84,7 @@
     <CudaCompile Include="hitable_list.cu" />
     <CudaCompile Include="kernel.cu" />
     <CudaCompile Include="lambertian.cu" />
+    <CudaCompile Include="metal.cu" />
     <CudaCompile Include="sphere.cu" />
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +96,7 @@
     <ClInclude Include="hitable_list.h" />
     <ClInclude Include="lambertian.h" />
     <ClInclude Include="material.h" />
+    <ClInclude Include="metal.h" />
     <ClInclude Include="ppmManagement.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="sphere.h" />

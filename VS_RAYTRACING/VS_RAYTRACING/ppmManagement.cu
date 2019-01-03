@@ -3,12 +3,17 @@
 ppmManagement::ppmManagement(){}
 ppmManagement::~ppmManagement(){}
 
-glm::vec3 ppmManagement::getColor(const ray& r, hitable *WORLD) {
+glm::vec3 ppmManagement::getColor(const ray& r, hitable *WORLD, int depth) {
 	hit_record rec;
 	if (WORLD->hit(r, 0.001, FLT_MAX, rec)) {
-		glm::vec3 target = rec.p + rec.normal + randomInUnitSphere();
-		ray ray_ret(rec.p, target - rec.p);
-		return 0.5f*getColor(ray_ret,WORLD);
+		ray scattered;
+		glm::vec3 attenuation;
+		if (depth < 50 && rec.mat_ptr->scatter(r,rec,attenuation,scattered)) {
+			return attenuation * getColor(scattered, WORLD, depth + 1);
+		}
+		else {
+			return glm::vec3(0, 0, 0);
+		}
 	}
 	else {
 		glm::vec3 unitDirection = glm::normalize(r.getDirection());
@@ -26,10 +31,12 @@ void ppmManagement::createImage(int _w, int _h, int ns, const std::string &_name
 	ray r;
 	glm::vec3 color;
 
-	int const total_hitables = 2;
+	int const total_hitables = 4;
 	hitable *list[total_hitables];
-	list[0] = new sphere(glm::vec3(0, 0, -1), 0.5);
-	list[1] = new sphere(glm::vec3(0, -100.5, -1), 100);
+	list[0] = new sphere(glm::vec3(0, 0, -1), 0.5, new lambertian(glm::vec3(0.8, 0.3, 0.3)));
+	list[1] = new sphere(glm::vec3(0, -100.5, -1), 100, new lambertian(glm::vec3(0.8, 0.8, 0.0)));
+	list[2] = new sphere(glm::vec3(1,0,-1), 0.5, new metal(glm::vec3(0.8, 0.6, 0.2)));
+	list[3] = new sphere(glm::vec3(-1,0,-1), 0.5, new metal(glm::vec3(0.8, 0.8, 0.8)));
 	hitable *WORLD = new hitable_list(list, total_hitables);
 
 	camera cam;
@@ -45,7 +52,7 @@ void ppmManagement::createImage(int _w, int _h, int ns, const std::string &_name
 				u = float(i + UTIL_rand_d()) / float(_w);
 				v = float(j + UTIL_rand_d()) / float(_h);
 				r = cam.getRay(u, v);
-				color += getColor(r, WORLD);
+				color += getColor(r, WORLD,0);
 			}
 
 			color /= float(ns);

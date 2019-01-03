@@ -3,7 +3,10 @@
 sphere::sphere() {}
 sphere::~sphere() {}
 
-sphere::sphere(glm::vec3 cen, float r): center(cen), radius(r){}
+sphere::sphere(glm::vec3 cen, float r, material *mat)
+: center(cen), radius(r){
+	mat_ptr = mat;
+}
 
 bool sphere::hit(const ray &r, float t_min, float t_max, hit_record &rec) const{
 	glm::vec3 const origin = r.getOrigin();
@@ -21,6 +24,7 @@ bool sphere::hit(const ray &r, float t_min, float t_max, hit_record &rec) const{
 			rec.t = temp;
 			rec.p = r.getPointAtParameter(rec.t);
 			rec.normal = (rec.p - center) / radius;
+			rec.mat_ptr = mat_ptr;
 			return true;
 		}
 
@@ -29,6 +33,7 @@ bool sphere::hit(const ray &r, float t_min, float t_max, hit_record &rec) const{
 			rec.t = temp;
 			rec.p = r.getPointAtParameter(rec.t);
 			rec.normal = (rec.p - center) / radius;
+			rec.mat_ptr = mat_ptr;
 			return true;
 		}
 	}

@@ -14,6 +14,9 @@
     <CudaCompile Include="lambertian.cu">
       <Filter>src</Filter>
     </CudaCompile>
+    <CudaCompile Include="metal.cu">
+      <Filter>src</Filter>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -49,6 +52,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="material.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="metal.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

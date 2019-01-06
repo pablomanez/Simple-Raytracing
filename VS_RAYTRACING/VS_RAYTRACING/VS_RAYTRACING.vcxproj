@@ -58,6 +58,10 @@
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <CodeGeneration>compute_30,sm_30</CodeGeneration>
     </CudaCompile>
+    <CudaLink>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </CudaLink>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -78,14 +82,13 @@
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <CodeGeneration>compute_30,sm_30</CodeGeneration>
     </CudaCompile>
+    <CudaLink>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+    </CudaLink>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="camera.cu" />
-    <CudaCompile Include="hitable_list.cu" />
     <CudaCompile Include="kernel.cu" />
-    <CudaCompile Include="lambertian.cu" />
-    <CudaCompile Include="metal.cu" />
-    <CudaCompile Include="sphere.cu" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -97,14 +100,9 @@
     <ClInclude Include="lambertian.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="metal.h" />
-    <ClInclude Include="ppmManagement.h" />
     <ClInclude Include="ray.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="Util.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ppmManagement.cu" />
-    <ClCompile Include="ray.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

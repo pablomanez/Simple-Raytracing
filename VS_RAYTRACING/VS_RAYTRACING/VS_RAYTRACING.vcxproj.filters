@@ -2,21 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <CudaCompile Include="kernel.cu" />
-    <CudaCompile Include="sphere.cu">
-      <Filter>src</Filter>
-    </CudaCompile>
-    <CudaCompile Include="hitable_list.cu">
-      <Filter>src</Filter>
-    </CudaCompile>
-    <CudaCompile Include="camera.cu">
-      <Filter>src</Filter>
-    </CudaCompile>
-    <CudaCompile Include="lambertian.cu">
-      <Filter>src</Filter>
-    </CudaCompile>
-    <CudaCompile Include="metal.cu">
-      <Filter>src</Filter>
-    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -28,9 +13,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Util.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="ppmManagement.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="ray.h">
@@ -57,13 +39,5 @@
     <ClInclude Include="metal.h">
       <Filter>src</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ppmManagement.cu">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="ray.cu">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

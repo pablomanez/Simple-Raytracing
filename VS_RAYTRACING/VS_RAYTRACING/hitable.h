@@ -1,16 +1,9 @@
 #pragma once
 
-#include "ray.h"
 #include "Util.h"
+#include "ray.h"
 
 class material;
-
-struct hit_record {
-	float t;
-	glm::vec3 p;
-	glm::vec3 normal;
-	material *mat_ptr;
-};
 
 class hitable {
 	public:

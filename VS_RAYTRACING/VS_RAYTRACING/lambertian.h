@@ -1,5 +1,7 @@
 #pragma once
 
+struct hit_record;
+
 #include "Util.h"
 #include "ray.h"
 #include "material.h"

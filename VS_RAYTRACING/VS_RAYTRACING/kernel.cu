@@ -9,7 +9,33 @@
 #include "metal.h"
 #include "lambertian.h"
 
-__device__ glm::vec3 getColor(const ray& r, hitable *WORLD, int depth) {
+__device__ glm::vec3 getColor(const ray& r, hitable **WORLD, int depth) {
+	ray cur_ray = r;
+	glm::vec3 cur_attenuation(1.0, 1.0, 1.0);
+	
+	for (int i = 0; i < depth; i++) {
+		hit_record rec;
+		if ((*WORLD)->hit(cur_ray, 0.001, FLT_MAX, rec)) {
+			ray scattered;
+			glm::vec3 attenuation;
+			if (rec.mat_ptr->scatter(cur_ray, rec, attenuation, scattered)) {
+				cur_attenuation *= attenuation;
+				cur_ray = scattered;
+			}
+			else {
+				return glm::vec3(0.0, 0.0, 0.0);
+			}
+		}
+		else {
+			glm::vec3 unit_direction = glm::normalize(cur_ray.getDirection());
+			float t = 0.5f*(unit_direction.y + 1.0f);
+			glm::vec3 c = (1.0f - t)*glm::vec3(1.0, 1.0, 1.0) + t * glm::vec3(0.5, 0.7, 1.0);
+			return cur_attenuation * c;
+		}
+	}
+	return glm::vec3(0.0, 0.0, 0.0); // exceeded recursion
+
+	/*
 	hit_record rec;
 	if (WORLD->hit(r, 0.001, FLT_MAX, rec)) {
 		ray scattered;
@@ -26,77 +52,150 @@ __device__ glm::vec3 getColor(const ray& r, hitable *WORLD, int depth) {
 		float t = 0.5 * (unitDirection.y + 1.0f);
 		return ((1.0f - t) * glm::vec3(1.f)) + (t * glm::vec3(0.5, 0.7, 1.0));
 	}
+	*/
+}
+
+__global__ void initVariables(hitable **list, int list_length, hitable **WORLD) {
+	if (threadIdx.x == 0 && blockIdx.x == 0) {
+		list[0] = new sphere(glm::vec3( 0,	     0,	-1),		0.5,		new lambertian	(glm::vec3(0.8, 0.3, 0.3)));
+		list[1] = new sphere(glm::vec3( 0,  -100.5, -1),		100,		new lambertian	(glm::vec3(0.8, 0.8, 0.0)));
+		list[2] = new sphere(glm::vec3( 1,	     0,	-1),		0.5,		new metal		(glm::vec3(0.8, 0.6, 0.2),	0.3));
+		list[3] = new sphere(glm::vec3(-1,	     0,	-1),		0.5,		new metal		(glm::vec3(0.8, 0.8, 0.8),	1.0));
+		*WORLD = new hitable_list(list, list_length);
+	}
+}
+
+__global__ void createImage(glm::vec3 *d_arr, hitable **WORLD, int _w, int _h, int ns) {
+	int i = blockIdx.x * blockDim.x + threadIdx.x;
+	int j = blockIdx.y * blockDim.y + threadIdx.y;
+	
+	if (i >= _w || j >= _h) return;
+	
+	glm::vec3 color(0,0,0);
+	camera cam;
+	ray r;
+
+	for (int s = 0; s < ns; s++) {
+		float u = float(i + UTIL_rand_d()) / float(_w);
+		float v = float(j + UTIL_rand_d()) / float(_h);
+		r = cam.getRay(u, v);
+		color += getColor(r, WORLD, 50);
+	}
+
+	color /= float(ns);
+	// color = glm::vec3(glm::sqrt(color.r), glm::sqrt(color.g), glm::sqrt(color.b));
+
+	color.r = int(255.99 * color.r);
+	color.g = int(255.99 * color.g);
+	color.b = int(255.99 * color.b);
+	
+	// Llevar los resultados al array 
+	int pos = j * _w + i;
+	pos = abs(_w*_h - pos);
+	// d_arr[pos] = glm::vec3(pos, pos, pos);
+	d_arr[pos] = color;
 }
 
 int main(void) {
 	//Establezco la GPU que voy a usar
 	cudaSetDevice(0);
-
-#define K_THREADS	8
-#define K_BLOCKS	8
 	
 	// DATA 
 	// ns es la precision del aliasing 
 	const std::string filename = "img.PPM";
-	int const total_hitables = 4;
-	int ir, ig, ib, _w, _h, ns;
-	glm::vec3 color;
-	float u, v;
-	ray r;
+	int const TOTAL_HITABLES = 4;
+	int _w, _h, ns;
+	cudaError_t err_;
 
 	std::ofstream _out(filename);
 	_w = 200;
 	_h = 100;
 	ns = 100;
+	int imgSize = _w * _h;
 	
 	// Definir variables que voy a usar en la GPU
-	glm::vec3 *h_arr, *d_arr;	// Array de salida de cada color
+	// Array de salida de cada color
+	glm::vec3 *d_arr = NULL;
+	glm::vec3 *h_arr = new glm::vec3[_w*_h];
 
+	for (int i = 0; i < imgSize; i++) {
+		h_arr[i] = glm::vec3(0,0,0);
+	}
 
+	hitable **list = NULL;
+	hitable **WORLD = NULL;
 
-	// hitable *list[total_hitables];
-	// list[0] = new sphere(glm::vec3(0, 0, -1), 0.5, new lambertian(glm::vec3(0.8, 0.3, 0.3)));
-	// list[1] = new sphere(glm::vec3(0, -100.5, -1), 100, new lambertian(glm::vec3(0.8, 0.8, 0.0)));
-	// list[2] = new sphere(glm::vec3(1, 0, -1), 0.5, new metal(glm::vec3(0.8, 0.6, 0.2), 0.3));
-	// list[3] = new sphere(glm::vec3(-1, 0, -1), 0.5, new metal(glm::vec3(0.8, 0.8, 0.8), 1.0));
-	// hitable *WORLD = new hitable_list(list, total_hitables);
-	// 
-	// camera cam;
+	// Reservo memoria de la GPU
+	int kMemBytes = sizeof(glm::vec3)*_w*_h;
+	
+	cudaMalloc((void**)&d_arr,	kMemBytes);
+	cudaMalloc((void**)&list,	TOTAL_HITABLES*sizeof(hitable*));
+	cudaMalloc((void**)&WORLD,  sizeof(hitable*));
+	
+	// Solo se lanza 1 nucleo ya que solo se va a hacer 1 vez
+	initVariables <<< 1,1 >>> (list, TOTAL_HITABLES,WORLD);
+	cudaDeviceSynchronize();
+
+	// Miro errores
+	err_ = cudaGetLastError();
+	if (err_ != cudaSuccess) {
+		std::cerr << "A: Error " << cudaGetErrorString(err_) << "\n";
+	}
+
+	// Defino el tamanyo de bloque y malla
+	int K_THREADS_W	= 32;
+	int K_THREADS_H	= 32;
+	int K_BLOCKS_W	= ((float)_w / K_THREADS_W) > (_w / K_THREADS_W) ? (_w / K_THREADS_W) + 1 : (_w / K_THREADS_W);
+	int K_BLOCKS_H	= ((float)_h / K_THREADS_H) > (_h / K_THREADS_H) ? (_h / K_THREADS_H) + 1 : (_h / K_THREADS_H);
+
+	std::cout << "BLOQUE: " << K_THREADS_W << " x " << K_THREADS_H << std::endl;
+	std::cout << "MALLA: " << K_BLOCKS_W << " x " << K_BLOCKS_H << std::endl;
+
+	dim3 tpb(K_THREADS_W, K_THREADS_H, 1);	// Hilos por bloque		(THREADS PER BLOCK)
+	dim3 bpg(K_BLOCKS_W, K_BLOCKS_H, 1);	// Bloques por malla	(BLOCKS PER GRID)
+	
+	// LINK STARTO!
+	cudaMemcpy(d_arr, h_arr, kMemBytes, cudaMemcpyHostToDevice);
+	// Miro errores
+	err_ = cudaGetLastError();
+	if (err_ != cudaSuccess) {
+		std::cerr << "C: Error " << cudaGetErrorString(err_) << "\n";
+	}
+
+	createImage <<< bpg, tpb >>> (d_arr, WORLD, _w, _h, ns);
+	// Miro errores
+	err_ = cudaGetLastError();
+	if (err_ != cudaSuccess) {
+		std::cerr << "D: Error " << cudaGetErrorString(err_) << "\n";
+	}
+
+	cudaMemcpy(h_arr, d_arr, kMemBytes, cudaMemcpyDeviceToHost);
+	
+	// Miro errores
+	err_ = cudaGetLastError();
+	if (err_ != cudaSuccess) {
+		std::cerr << "E: Error " << cudaGetErrorString(err_) << "\n";
+	}
 
 	// Inicio del archivo PPM
-	//	P3  -> El archivo esta en ASCII
-	//	255 -> Color 'maximo'
-	// _out << "P3\n" << _w << " " << _h << "\n255\n";
-	/*
-
+	_out << "P3\n" << _w << " " << _h << "\n255\n";
+	
 	// ESTO DEBE IR EN UNA FUNCION GLOBAL
-	for (int j = _h - 1; j >= 0; j--) {
-		for (int i = 0; i < _w; i++) {
-			color = glm::vec3(0, 0, 0);
-			for (int s = 0; s < ns; s++) {
-				u = float(i + UTIL_rand_d()) / float(_w);
-				v = float(j + UTIL_rand_d()) / float(_h);
-				ray r = cam.getRay(u, v);
-				color += getColor(r, WORLD, 0);
-			}
-
-			color /= float(ns);
-			color = glm::vec3(glm::sqrt(color.r), glm::sqrt(color.g), glm::sqrt(color.b));
-			ir = int(255.99 * color.r);
-			ig = int(255.99 * color.g);
-			ib = int(255.99 * color.b);
-
-			// Valores de los pixeles
-			_out << ir << " ";
-			_out << ig << " ";
-			_out << ib << "\n";
-		}
+	for (int i = 0; i < imgSize; i++) {
+			_out << h_arr[i].r << " ";
+			_out << h_arr[i].g << " ";
+			_out << h_arr[i].b << "\n";
 	}
-	*/
 
 	// Libero la GPU
 	// TODO: 
 	//		Liberar el espacio reservado de la gpu
+	// delete h_arr;
+	
+	// cudaFree(d_arr);
+	// cudaFree(list);
+	// cudaFree(WORLD);
+	
 	cudaDeviceReset();
 
 	std::cout << "Finalizado" << '\n';
@@ -206,6 +305,12 @@ COMO COJONES LO HE HECHO:
 	Cambiar la estructura de las clases, porque no compila ^^
 	Mover todo al .h
 	Leer MUCHA documentación
+	Nvidia GTX 660 -> 16 bloques/sm && 2048 hilos/sm (IMG DE 200x100!!!!)
+		T_BLOQUE = 32x32
+		T_MALLA = 200/32 x 100/32 = 6.25x3.125 = 7x4
+
+	---
+	Hay un error y como da en la primera posicion de todas, sale de la funcion directamente y no hace nada
 
 PASOS:
 	1. Reservar la GPU y la memoria a usar

@@ -1,5 +1,5 @@
 # Simple-Raytracing
-This an assignment of DISM (Dispositivos e Infraestructuras de Sistemas Multimedia) of a raytracer using CUDA acceleration, following the Peter Shirley book (https://github.com/petershirley/raytracinginoneweekend), and making, or at least trying to make, my own CUDA implementation.
+This an assignment of DISM (Dispositivos e Infraestructuras de Sistemas Multimedia) of a raytracer using CUDA acceleration, following the Peter Shirley book (https://github.com/petershirley/raytracinginoneweekend), and making, or at least trying to make, my own and very first CUDA implementation.
 
 In the doc folder, you can see and read (IN SPANISH) the actual document I wrote.
 
